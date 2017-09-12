@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TinyApp</title>
+    <% include ./partials/_header %>
+</head>
+
+<body>
+
+    <h1>Your Short URL</h1>
+    <table style="width: 75%">
+        <tr>
+            <th>URL</th>
+            <th>TinyUrl</th>
+        </tr>
+        <tr>
+            <td><ul>
+              <% for (var key in urls) { %>           <!-- print list of links in urlDatabase -->
+            <%= key + ' : ' + urls[key] %>
+                <!-- for loop to cycle through the passed 'urls' and display the key and value + a dead link-->
+            <br>
+              <% }%>
+            </ul> </td>
+            <td> <a> <a href="https://www.w3.org/">ShortenNewURLlink</a> </td>
+        </tr>
+
+
+</body>
+
+</html>
