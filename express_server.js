@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require('cookie-parser')
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
@@ -8,6 +9,7 @@ function generateRandomString() {
     return randomString;
 }
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
@@ -16,15 +18,12 @@ let urlDatabase = {
     "9sm5xK": "http://www.google.com",
     "5b4xy8": "http://www.facebook.com"
 };
-//print out a string "Hello!" in html
-app.get("/hello", (req, result) => {
-    result.end("<html><body>Hello <b>World</b></body></html>\n");
-});
 // route to urlDatabase
 app.get("/urls", (req, result) => {
-    let templateVars = { urls: urlDatabase };
+    let templateVars = { urls: urlDatabase, username: req.cookies.username };
     result.render("urls_index", templateVars);
 });
+
 app.get("/urls/new", (req, result) => {
     // let templateVars = { longURL: urlDatabase[req.params.shorturl] }
     result.render("urls_new");
@@ -49,13 +48,35 @@ app.post("/urls", (req, result) => {
 //   delete object.property
 app.post("/urls/:id/delete", (req, result) => {
     delete(urlDatabase[req.params.id]); // delete my object id from the html form
-    result.redirect("http://localhost:8080/urls/") // redirect to main page
+    result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
 //re-assign the value of the long url to the new input
 app.post("/urls/:id/update", (req, result) => {
     urlDatabase[req.params.id] = req.body.longURL;
-    result.redirect("http://localhost:8080/urls/") // redirect to main page
+    result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
+
+
+//get a login username and create a user cookie
+app.post("/login", (req, res) => { //recieves cooking and redirects
+    res.cookie('username', req.body.username);
+    console.log(req.cookies.username);
+    res.redirect("/urls");
+});
+//get a logout username and create a user cookie
+app.post("/logout", (req, res) => { //recieves cooking and redirects
+    res.clearCookie('username');
+    res.redirect("/urls");
+});
+//for returning the cookie to display back to user
+app.post("/urls", (req, res) => { //writes username cookie to server
+    let templateVars = {
+        username: req.cookies.username
+    }
+    res.cookie("username", req.body.username);
+    res.render("urls_index", templateVars);
+});
+
 //port message on the console
 app.listen(PORT, () => {
     console.log(`tiny url app listening on port ${PORT}!`);

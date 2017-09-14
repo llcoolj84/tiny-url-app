@@ -7,26 +7,24 @@
 </head>
 
 <body>
-    <h1>It's The Tiny URL App! <span class="badge badge-secondary">Brand Spanking New</span></h1>
-    <div style="background: ##5096ff ; front=size:16px; padding:50px;">
-        <h1><strong> Shortened URLs</strong></h1>
-        <table style="width: 50%">
-            <ul>
-                <% for (var key in urls) { %>
-                        <%=key + ' --> ' %> <a href=<%=urls[key]%>><%=urls[key]%></a>
-                        <!-- loop and create list of links in urlDatabase -->
-                        <form method="POST" action=<%="/urls/" + key + "/delete" %>>
-                            <input type="hidden" name="id" value=<%=key%> />
-                            <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete</button>
-                        </form>
-                        <form method="POST" action=<%="/urls/" + key  %>>
-                            <input type="hidden" name="id" value=<%=key%> />
-                            <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit</button>
-                        </form>
-                        <br>
-                        <% }%>
-            </ul>
-            <a href="http://localhost:8080/urls/new">Create Your Own Tiny URL</a></td>
+    <a href="http://localhost:8080/urls/new"><h4>➡️ Create Your Own Tiny URL ⬅️</h4></a>
+    <h1><strong> Shortened URLs</strong></h1>
+    <table style="width: 50%">
+        <ul>
+            <% for (var key in urls) { %>
+                <%=key + ' --> ' %> <a href=<%=urls[key]%>><%=urls[key]%></a>
+                    <!-- loop and create list of links in urlDatabase -->
+                    <form method="POST" action=<%="/urls/" + key + "/delete" %>>
+                        <input type="hidden" name="id" value=<%=key%> />
+                        <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete 💩 </button>
+                    </form>
+                    <form method="POST" action=<%="/urls/" + key %>>
+                        <input type="hidden" name="id" value=<%=key%> />
+                        <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit 🤦</button>
+                    </form>
+                    <br>
+                    <% }%>
+        </ul>
 </body>
 
 </html>
