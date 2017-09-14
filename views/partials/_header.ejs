@@ -1,25 +1,35 @@
 
-<head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <h1>It's The Tiny URL App! <span class="badge badge-secondary">Brand Spanking New</span></h1>
-    <div style="background: #ffffff ; front=size:16px; padding:10px;">
+<head>
+    <h5>TinyURL.io <span class="badge badge-secondary"></span></h5>
+    <div style="background: #ffffff ; front=size:25px; padding:3px; style="text-align:right;">
 </head>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" style="text-align:right;">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-            <div style="background: #f6f6f6 ; front=size:10px; padding:10px;">
+            <div style="background: #f6f6f6 ; front=size:50px; padding:1px;">
                 <span class="glyphicon glyphicon glyphicon-tree-deciduous"></span>
-                Ready to Shorten your URL?
+
+                <!-- check if user logged in and display username, if not, keep form to fill username -->
+
                 <% if(username !== undefined){ %>
-                <h5>Your username is: <%= username %></h5>
+
+                  <h6>Your username is: <%= username %></h6>
                   <form action="/logout" method="POST" style="margin:10px;">
                     <button type="submit" value="Submit" class="btn btn-outline-primary">Logout ✌️</button>
                   </form>
+
                 <% } else{ %>
+
+                    <h6><a href="http://localhost:8080/register">No username? Click Here</a></h6>
                   <form action="/login" method="POST" style="margin:10px;">
-                    <label for="username">Please Enter a Username:</label>
-                    <input id="username" type="text" name="username" placeholder="username" style="width: 300px">
-                    <button type="submit" value="Submit"class="btn btn-outline-primary">Submit ⟹</button>
+                    <label for="username">Email:</label>
+                    <input class="form-control" id="email" type="email" name="username" placeholder="email" aria-describedby="sizing-addon2" style="width: 300px">
+
+                     <label for="password">Password:</label>
+                    <input class="form-control" id="password" type="password" name="password" placeholder="password" aria-describedby="sizing-addon2" style="width: 300px">
+                    <button type="submit" value="Submit"class="btn btn-outline-primary">Login</button>
+
                   </form>
                 <% } %>
 
