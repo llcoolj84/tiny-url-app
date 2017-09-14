@@ -18,7 +18,7 @@
                         <input type="hidden" name="id" value=<%=key%> />
                         <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete 💩 </button>
                     </form>
-                    <form method="POST" action=<%="/urls/" + key %>>
+                    <form method="GET" action=<%="/urls/" + key %>>
                         <input type="hidden" name="id" value=<%=key%> />
                         <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit 🤦</button>
                     </form>

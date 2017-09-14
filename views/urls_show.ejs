@@ -9,13 +9,14 @@
 <body>
     <h1>Short URL</h1>
     <table style="width: 25%">
-                    <%= shortURL + " : " + targetURL %> <!-- prints the full URL on the body for the shortURL -->
-                    <br>
-                       <form action=<%="/urls/" + shortURL + "/update" %> method="POST" style="margin:150px;">
-                        <label for="longURL"></label>
-                         <input id="longURL" type="text" name="longURL" placeholder="<%= targetURL %>"style="width: 300px">
-                       <input type="submit" value="Update">
-        </form>
+        <%= shortURL + " : " + targetURL %>
+            <!-- prints the full URL on the body for the shortURL -->
+            <br>
+            <form action=<%="/urls/" + shortURL + "/update" %> method="POST" style="margin:150px;">
+                <label for="longURL"></label>
+                <input id="longURL" type="text" name="longURL" placeholder="<%= targetURL %>" style="width: 300px">
+                <input type="submit" value="Update">
+            </form>
 </body>
 
 </html>

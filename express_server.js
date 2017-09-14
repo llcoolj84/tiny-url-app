@@ -18,23 +18,24 @@ let urlDatabase = {
     "9sm5xK": "http://www.google.com",
     "5b4xy8": "http://www.facebook.com"
 };
-// route to urlDatabase
-app.get("/urls", (req, result) => {
+
+// route to urlDatabase (main page **working**)
+app.get("/urls", (req, result, username) => {
     let templateVars = { urls: urlDatabase, username: req.cookies.username };
     result.render("urls_index", templateVars);
 });
 
-app.get("/urls/new", (req, result) => {
-    // let templateVars = { longURL: urlDatabase[req.params.shorturl] }
-    result.render("urls_new");
+app.get("/urls/new", (req, result, username) => {
+    let templateVars = { longURL: urlDatabase[req.params.shorturl], username: req.cookies.username }
+    result.render("urls_new", templateVars);
 });
-// route to urlshortenedlinks page
-app.post("/urls/:shorturl", (req, result) => {
-    let templateVars = { shortURL: req.params.shorturl, targetURL: urlDatabase[req.params.shorturl] };
+// route to urlshortenedlinks page to edit **working now**
+app.get("/urls/:shortURL", (req, result, username) => {
+    let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], username: req.cookies.username }
     result.render("urls_show", templateVars);
 });
-app.post("/u/:shortURL", (req, result) => {
-    let longURL = urlDatabase[req.params.shorturl]
+app.post("/urls/:shortURL", (req, result) => {
+    let longURL = urlDatabase[req.params.shortURL];
     result.redirect(longURL);
 });
 //new generated link
@@ -50,13 +51,11 @@ app.post("/urls/:id/delete", (req, result) => {
     delete(urlDatabase[req.params.id]); // delete my object id from the html form
     result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
-//re-assign the value of the long url to the new input
+//re-assign the value of the long url to the new input ** working **
 app.post("/urls/:id/update", (req, result) => {
     urlDatabase[req.params.id] = req.body.longURL;
     result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
-
-
 //get a login username and create a user cookie
 app.post("/login", (req, res) => { //recieves cooking and redirects
     res.cookie('username', req.body.username);
