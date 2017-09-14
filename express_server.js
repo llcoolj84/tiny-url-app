@@ -34,6 +34,7 @@ function generateRandomString() {
 
 // route to urlDatabase (main page)
 app.get("/urls", (req, result, username) => {
+    console.log(req.cookies.username);
     let templateVars = { urls: urlDatabase, username: req.cookies.username };
     result.render("urls_index", templateVars);
 });
@@ -52,11 +53,15 @@ app.get("/register", (req, result, username) => {
     let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], username: req.cookies.username }
     result.render("urls_register", templateVars);
 });
+app.get("/login", (req, result, username) => {
+    let templateVars = {};
+    result.render("urls_login", templateVars);
+});
 //  register page post
 app.post("/register", (req, result, username) => {
     let uEu = req.body.email;
     let uEp = req.body.password;
-    rString = generateRandomString(); // generate random userid
+    let rString = generateRandomString(); // generate random userid
     if (uEu == false || uEp == false) {
         result.send("404 Error. Enter valid username & password");
     }
@@ -66,9 +71,10 @@ app.post("/register", (req, result, username) => {
         password: uEp
     };
 
-    result.cookie('id', rString);
-    result.cookie('email', req.body.email);
-    result.cookie('password', req.body.password);
+    result.cookie('username', users[rString].id);
+    // result.cookie('email', users[rString].email);
+    console.log(users[rString]);
+    console.log(users[rString].email);
     result.redirect('/urls');
 });
 // app.post("/urls/:shortURL", (req, result) => {
@@ -95,16 +101,20 @@ app.post("/urls/:id/update", (req, result) => {
     result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
 //get a login username and password create a user cookie
-app.post("/login", (req, res) => { //recieves cooking and redirects
+app.post("/login", (req, res) => { //recieves cookie and redirects
 
+    res.cookie('email', req.body.email);
     res.cookie('email', req.body.email);
     res.redirect("/urls");
 
 });
 //get a logout username and create a user cookie
 app.post("/logout", (req, res) => { //recieves cooking and redirects
-    res.clearCookie('username');
-    res.redirect("/urls");
+    res.clearCookie('username', '');
+    res.clearCookie('email', '');
+    res.redirect("/login");
+    console.log(Object.keys(req.cookies));
+
 });
 //for returning the cookie to display back to user
 app.post("/urls", (req, res) => { //writes username cookie to server
