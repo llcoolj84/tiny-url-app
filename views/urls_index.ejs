@@ -9,24 +9,34 @@
 
 <body>
     <a href="http://localhost:8080/urls/new"><h4>➡️ Create Your Own Tiny URL ⬅️</h4></a>
-    <a><h1><strong> Shortened URLs</strong></h1></a>
+    <a><h2><strong> Shortened URLs</strong></h2></a>
     <table style="width: 50%">
-        <ul>
-            <% for (var key in urls) { %>
-                <%=key + ' ➡️ ' %> <a href=<%=urls[key].fullURL%>><%=urls[key].fullURL%></a>
+        <ul><% if (user_id  !== undefined ) { %> <!-- if user is logged in. -->
+
+                <% for (var key in urls) { %>
+
+                <a href=<%=urls[key].fullURL%>><%=key%></a> will send you to -->  <a href=<%=urls[key].fullURL%>><%=urls[key].fullURL%></a><br>
+
                     <!-- loop and create list of links in urlDatabase -->
+
+
+                  <% if (user_id  ===  urls[key].userPoster) { %>
                     <form method="POST" action=<%="/urls/" + key + "/delete" %>>
+                        <br>
                         <input type="hidden" name="id" value=<%=key%> />
                         <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete 💩 </button>
                     </form>
-
                     <form method="GET" action=<%="/urls/" + key %>>
                         <input type="hidden" name="id" value=<%=key%> />
                         <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit 🤦</button>
                     </form>
                     <br>
-                    <% }%>
+                    <br>
+                  <% }%>
+                <% }%>
+            <% } else { %>
+                <h1>hey don't forget to sign in to see the links.</h1>
+                    <% } %>
         </ul>
 </body>
-
 </html>

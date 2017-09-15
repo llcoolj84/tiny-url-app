@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
 let currentUsername = '';
+// let urlsForUser = ;
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,7 +57,6 @@ app.get("/urls/new", (req, res, user_id) => {
     }
 
     res.redirect('/login');
-
 });
 // route to urlshortenedURL page to edit
 app.get("/urls/:shortURL", (req, res, user_id) => {
@@ -135,8 +135,7 @@ app.post("/logout", (req, res) => { //recieves cooking and redirects
 
     res.clearCookie('user_id');
     res.redirect("/urls");
-    console.log(Object.keys(req.cookies));
-
+    //console.log(Object.keys(req.cookies));
 });
 //for returning the cookie to display back to user
 app.post("/urls", (req, res) => { //writes user_id cookie to server
