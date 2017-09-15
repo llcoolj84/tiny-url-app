@@ -2,6 +2,7 @@
   "name": "node-ejs",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^1.0.0",

@@ -3,6 +3,8 @@ const cookieParser = require('cookie-parser')
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
+
 // let currentUsername = ;
 // let urlsForUser = ;
 
@@ -30,12 +32,12 @@ let users = {
     "asX4l2": {
         id: "joeMomma",
         email: "joe@momma.com",
-        password: "mommy"
+        password: bcrypt.hashSync('mommy', 10)
     },
     "asdf452": {
         id: "joeDaddy",
         email: "joe@daddy.com",
-        password: "daddy"
+        password: bcrypt.hashSync('daddy', 10)
     }
 };
 
@@ -110,7 +112,7 @@ app.post("/register", (req, res, user_id) => {
     users[rString] = {
         id: rString,
         email: uEu,
-        password: uEp
+        password: bcrypt.hashSync(uEp, 10)
     };
     res.cookie('user_id', users[rString].id);
     // res.cookie('email', users[rString].email);
@@ -145,18 +147,25 @@ app.post("/urls/:id/update", (req, res) => {
     urlDatabase[req.params.id] = req.body.longURL;
     res.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
+
+
 //get a login user_id and password create a user cookie
 app.post("/login", (req, res) => { //recieves cookie and redirects
     let uEu = req.body.email;
     let uEp = req.body.password;
     for (id in users) {
-        if (uEu === users[id].email && uEp === users[id].password) {
+        if (uEu === users[id].email && bcrypt.compareSync(uEp, users[id].password) === true) {
             res.cookie('user_id', id);
             res.redirect("/urls");
+            console.log(bcrypt.compare(uEp, users[id].password));
         }
     }
     res.send("no user exists");
 });
+
+
+
+
 //get a logout user_id and create a user cookie
 app.post("/logout", (req, res) => { //recieves cooking and redirects
 
