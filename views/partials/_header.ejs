@@ -10,25 +10,20 @@
             <div style="background: #f6f6f6 ; front=size:50px; padding:1px;">
                 <span class="glyphicon glyphicon glyphicon-tree-deciduous"></span>
 
-                <!-- check if user logged in and display username, if not, keep form to fill username -->
+                <!-- check if user logged in and display user_id, if not, keep form to fill user_id -->
 
-                <% if(username !== undefined){ %>
+                <% if(user_id !== undefined){ %>
 
-                  <h6>Your username is: <%= username %></h6>
+                  <h6>Your user_id is: <%= user_id %></h6>
                   <form action="/logout" method="POST" style="margin:10px;">
                     <button type="submit" value="Submit" class="btn btn-outline-primary">Logout ✌️</button>
                   </form>
 
                 <% } else{ %>
 
-                    <h6><a href="http://localhost:8080/register">No username? Click Here</a></h6>
-                  <form action="/login" method="POST" style="margin:10px;">
-                    <label for="username">Email:</label>
-                    <input class="form-control" id="email" type="email" name="username" placeholder="email" aria-describedby="sizing-addon2" style="width: 300px">
+                    <h6><a href="http://localhost:8080/register">No user_id? Click Here</a></h6>
+                       <h6><a href="http://localhost:8080/login">Log In Here</a></h6>
 
-                     <label for="password">Password:</label>
-                    <input class="form-control" id="password" type="password" name="password" placeholder="password" aria-describedby="sizing-addon2" style="width: 300px">
-                    <button type="submit" value="Submit"class="btn btn-outline-primary">Login</button>
 
                   </form>
                 <% } %>

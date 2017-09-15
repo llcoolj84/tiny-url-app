@@ -33,48 +33,47 @@ function generateRandomString() {
 }
 
 // route to urlDatabase (main page)
-app.get("/urls", (req, result, username) => {
-    console.log(req.cookies.username);
-    let templateVars = { urls: urlDatabase, username: req.cookies.username };
+app.get("/urls", (req, result, user_id) => {
+    console.log(req.cookies.user_id);
+    let templateVars = { urls: urlDatabase, user_id: req.cookies.user_id };
     result.render("urls_index", templateVars);
 });
 // get request renders new tinyURL maker page
-app.get("/urls/new", (req, result, username) => {
-    let templateVars = { longURL: urlDatabase[req.params.shorturl], username: req.cookies.username }
+app.get("/urls/new", (req, result, user_id) => {
+    let templateVars = { longURL: urlDatabase[req.params.shorturl], user_id: req.cookies.user_id }
     result.render("urls_new", templateVars);
 });
 // route to urlshortenedURL page to edit
-app.get("/urls/:shortURL", (req, result, username) => {
-    let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], username: req.cookies.username }
+app.get("/urls/:shortURL", (req, result, user_id) => {
+    let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], user_id: req.cookies.user_id }
     result.render("urls_show", templateVars);
 });
 //  register page get
-app.get("/register", (req, result, username) => {
-    let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], username: req.cookies.username }
+app.get("/register", (req, result, user_id) => {
+    let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL], user_id: req.cookies.user_id }
     result.render("urls_register", templateVars);
 });
-app.get("/login", (req, result, username) => {
+app.get("/login", (req, result, user_id) => {
     let templateVars = {};
     result.render("urls_login", templateVars);
 });
 //  register page post
-app.post("/register", (req, result, username) => {
+app.post("/register", (req, result, user_id) => {
     let uEu = req.body.email;
     let uEp = req.body.password;
     let rString = generateRandomString(); // generate random userid
     if (uEu == false || uEp == false) {
-        result.send("404 Error. Enter valid username & password");
+        result.send("404 Error. Enter valid user_id & password");
     }
     users[rString] = {
         id: rString,
         email: uEu,
         password: uEp
     };
-
-    result.cookie('username', users[rString].id);
+    result.cookie('user_id', users[rString].id);
     // result.cookie('email', users[rString].email);
-    console.log(users[rString]);
-    console.log(users[rString].email);
+    console.log(users);
+    console.log(users[rString].email + 'gregregueriguerhugheriugherguheurhgireuhgerhug');
     result.redirect('/urls');
 });
 // app.post("/urls/:shortURL", (req, result) => {
@@ -100,28 +99,32 @@ app.post("/urls/:id/update", (req, result) => {
     urlDatabase[req.params.id] = req.body.longURL;
     result.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
-//get a login username and password create a user cookie
+//get a login user_id and password create a user cookie
 app.post("/login", (req, res) => { //recieves cookie and redirects
-
-    res.cookie('email', req.body.email);
-    res.cookie('email', req.body.email);
-    res.redirect("/urls");
-
+    let uEu = req.body.email;
+    let uEp = req.body.password;
+    for (id in users) {
+        if (uEu === users[id].email && uEp === users[id].password) {
+            res.cookie('user_id', id);
+            res.redirect("/urls");
+        }
+    }
+    res.send("no user exists");
 });
-//get a logout username and create a user cookie
+//get a logout user_id and create a user cookie
 app.post("/logout", (req, res) => { //recieves cooking and redirects
-    res.clearCookie('username', '');
-    res.clearCookie('email', '');
-    res.redirect("/login");
+
+    res.clearCookie('user_id');
+    res.redirect("/urls");
     console.log(Object.keys(req.cookies));
 
 });
 //for returning the cookie to display back to user
-app.post("/urls", (req, res) => { //writes username cookie to server
+app.post("/urls", (req, res) => { //writes user_id cookie to server
     let templateVars = {
-        username: req.cookies.username
+        user_id: req.cookies.user_id
     }
-    res.cookie("username", req.body.username);
+    res.cookie("user_id", req.body.user_id);
     res.render("urls_index", templateVars);
 });
 //port message on the console
