@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser')
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-let currentUsername = '';
+// let currentUsername = ;
 // let urlsForUser = ;
 
 app.use(cookieParser());
@@ -44,11 +44,35 @@ function generateRandomString() {
     return randomString;
 }
 
+// function urlsForUser(id) {
+
+//     if (id = urlDatabase[req.params.shorturl]) {
+//         return ....what;
+
+//     }
+
+// }
+
 // route to urlDatabase (main page)
 app.get("/urls", (req, res, user_id) => {
-    let templateVars = { urls: urlDatabase, user_id: req.cookies.user_id }; //req.cookies.user_id is the current user login id
+    //req.cookies.user_id is the current user login id
+    let filteredDatabase = {};
+
+    for (i in urlDatabase) {
+        if (req.cookies.user_id === urlDatabase[i].userPoster) {
+            filteredDatabase[i] = urlDatabase[i];
+        } else if (req.cookies.user_id === undefined) {
+            console.log('helloooooooooooooooooooooooooooooooooooo');
+            filteredDatabase = urlDatabase;
+            break;
+        }
+    }
+    console.log(filteredDatabase);
+
+    let templateVars = { urls: filteredDatabase, user_id: req.cookies.user_id };
     res.render("urls_index", templateVars);
 });
+
 // get request renders new tinyURL maker page
 app.get("/urls/new", (req, res, user_id) => {
     let templateVars = { longURL: urlDatabase[req.params.shorturl], user_id: req.cookies.user_id }
@@ -60,9 +84,11 @@ app.get("/urls/new", (req, res, user_id) => {
 });
 // route to urlshortenedURL page to edit
 app.get("/urls/:shortURL", (req, res, user_id) => {
-    console.log('HELLOOOOOO----------------------------HELLOOOOOOO');
     let templateVars = { shortURL: req.params.shortURL, targetURL: urlDatabase[req.params.shortURL].fullURL, user_id: req.cookies.user_id }
-    res.render("urls_show", templateVars);
+    if (req.cookies.user_id !== undefined) {
+        res.render("urls_new", templateVars);
+    }
+    res.redirect('/login');
 });
 //  register page get
 app.get("/register", (req, res, user_id) => {
@@ -115,6 +141,7 @@ app.post("/urls/:id/delete", (req, res) => {
 });
 //   edit the value of the long url to the new input
 app.post("/urls/:id/update", (req, res) => {
+
     urlDatabase[req.params.id] = req.body.longURL;
     res.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
