@@ -83,7 +83,7 @@ app.get("/urls/new", (req, res, user_id) => {
     if (req.session.user_id !== undefined) {
         res.render("urls_new", templateVars);
     } else {
-        res.send("404 Error. Enter valid user_id & password");
+        res.send("404 Error. Please login to create a Tiny URL");
     }
 });
 
@@ -150,10 +150,9 @@ app.post("/urls/:id/update", (req, res) => {
 app.post("/login", (req, res) => { //recieves cookie and redirects
     let uEu = req.body.email;
     let uEp = req.body.password;
-
     let founduser = undefined;
 
-    for (let id in users) {
+    for (id in users) {
         if (uEu === users[id].email && bcrypt.compareSync(uEp, users[id].password) === true) {
             founduser = id;
         }
