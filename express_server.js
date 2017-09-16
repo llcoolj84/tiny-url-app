@@ -153,7 +153,7 @@ app.post("/login", (req, res) => { //recieves cookie and redirects
 
     let founduser = undefined;
 
-    for (id in users) {
+    for (let id in users) {
         if (uEu === users[id].email && bcrypt.compareSync(uEp, users[id].password) === true) {
             founduser = id;
         }
