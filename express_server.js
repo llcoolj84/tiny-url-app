@@ -82,8 +82,9 @@ app.get("/urls/new", (req, res, user_id) => {
     let templateVars = { longURL: urlDatabase[req.params.shorturl], user_id: req.session.user_id }
     if (req.session.user_id !== undefined) {
         res.render("urls_new", templateVars);
+    } else {
+        res.send("404 Error. Enter valid user_id & password");
     }
-    res.redirect('/login');
 });
 
 // short URL page to update
@@ -118,6 +119,7 @@ app.post("/register", (req, res, user_id) => {
         password: bcrypt.hashSync(uEp, 10)
     };
     req.session.user_id = users[rString].id;
+
     // res.cookie('email', users[rString].email);
     res.redirect('/urls');
 });
@@ -134,8 +136,6 @@ app.post("/newLink", (req, res) => {
 });
 //   delete object.property
 app.post("/urls/:id/delete", (req, res) => {
-    console.log('helloooooooooooooooo32034093840293840293849234----------->>>>>>>');
-    console.log(urlDatabase[req.params.id]);
     delete(urlDatabase[req.params.id]); // delete my object id from the html form
     res.redirect("http://localhost:8080/urls/"); // redirect to main page
 });
@@ -150,23 +150,28 @@ app.post("/urls/:id/update", (req, res) => {
 app.post("/login", (req, res) => { //recieves cookie and redirects
     let uEu = req.body.email;
     let uEp = req.body.password;
+
+    let founduser = undefined;
+
     for (id in users) {
         if (uEu === users[id].email && bcrypt.compareSync(uEp, users[id].password) === true) {
-            req.session.user_id = id;
-            res.redirect("/urls");
-            console.log(bcrypt.compare(uEp, users[id].password));
-        } else {
-            res.send("no user exists");
+            founduser = id;
         }
     }
+
+    if (founduser) {
+        req.session.user_id = id;
+        res.redirect("/urls");
+    } else {
+        res.send("user does not exist");
+    }
+
+
 });
 // logout user_id and create a user cookie
 app.post("/logout", (req, res) => { //recieves cooking and redirects
-
     req.session = null;
-    // res.clearCookie('user_id');
     res.redirect("/urls");
-    //console.log(Object.keys(req.session));
 });
 // for returning the cookie to display back to user
 app.post("/urls", (req, res) => { //writes user_id cookie to server
