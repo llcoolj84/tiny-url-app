@@ -3,45 +3,38 @@
 
 <head>
     <title>TinyApp</title>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
     <% include ./partials/_header.ejs %>
 
 </head>
 
 <body>
-    <a href="http://localhost:8080/urls/new"><h4>➡️ Create Your Own Tiny URL ⬅️</h4></a>
-    <a><h2><strong> Shortened URLs</strong></h2></a>
-    <table style="width: 50%">
+    <a href="http://localhost:8080/urls/new">
+     <h1 align="center">Create Your Own Tiny URL</h1></a>
+    <a><h3><strong> Shortened URLs</strong></h3></a>
 
-
-
-
-
-
+                <div>
                 <% for (var key in urls) { %>
 
-
-                <a href=<%=urls[key].fullURL%>><%=key%></a> will send you to -->  <a href=<%=urls[key].fullURL%>><%=urls[key].fullURL%></a><br>
+                <a href=<%=urls[key].fullURL%>><%=key%></a> will send you to -->  <a href=<%=urls[key].fullURL%>><%=urls[key].fullURL%></a>
+                <br>
 
                     <!-- loop and create list of links in urlDatabase -->
-                    <ul><% if (user_id  !== undefined ) { %> <!-- if user is logged in. -->
+                    <% if (user_id  !== undefined ) { %> <!-- if user is logged in. -->
+                        <li>
+                            <form method="POST" action=<%="/urls/" + key + "/delete" %>>
+                            <input type="hidden" name="id" value=<%=key%> />
+                            <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete 💩 </button>
+                            </form>
+                            <form method="GET" action=<%="/urls/" + key %>>
+                            <input type="hidden" name="id" value=<%=key%> />
+                            <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit 🤦</button>
+                            </form>
+                        </li>
 
-                        <form method="POST" action=<%="/urls/" + key + "/delete" %>>
 
-                        <input type="hidden" name="id" value=<%=key%> />
-                        <button type="submit" value="Delete" type="button" class="btn btn-primary">Delete 💩 </button>
-                        </form>
-                        <form method="GET" action=<%="/urls/" + key %>>
-                        <input type="hidden" name="id" value=<%=key%> />
-                        <button type="submit" value="Edit" type="button" class="btn btn-primary">Edit 🤦</button>
-                        </form>
-                        <br>
-
+                </div>
                         <% } %>
-
                 <% } %>
-
-
-
-        </ul>
 </body>
 </html>
