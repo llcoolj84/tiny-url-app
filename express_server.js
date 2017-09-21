@@ -49,7 +49,7 @@ app.set('trust proxy', 0) // trust first proxy
 
 app.use(cookieSession({
     name: 'session',
-    keys: ['key1', 'key2']
+    keys: ['user_id']
 }))
 
 app.get('/', function(req, res, next) {
@@ -150,7 +150,12 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/:id/update", (req, res) => {
 
     urlDatabase[req.params.id].fullURL = req.body.longURL;
-    return res.redirect("http://localhost:8080/urls/"); // redirect to main page
+    if (req.session.user_id === urlDatabase[i].userPoster) {
+        return res.redirect("http://localhost:8080/urls/"); // redirect to main page
+    } else {
+        res.status(403).send('Incorrect User');
+    }
+
 });
 
 // login user_id and password create a user cookie
