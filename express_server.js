@@ -149,8 +149,9 @@ app.post("/urls/:id/delete", (req, res) => {
 //   edit the value of the long url to the new input
 app.post("/urls/:id/update", (req, res) => {
 
-    urlDatabase[req.params.id].fullURL = req.body.longURL;
+
     if (req.session.user_id === urlDatabase[i].userPoster) {
+        urlDatabase[req.params.id].fullURL = req.body.longURL;
         return res.redirect("http://localhost:8080/urls/"); // redirect to main page
     } else {
         res.status(403).send('Incorrect User');
